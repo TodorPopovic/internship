@@ -2,17 +2,21 @@ package service
 
 import (
 	"context"
-	"intership/internal/sqlc/repo"
+	"intership/internal/sqlcdb"
 )
 
 type UserService struct {
-	*repo.Queries
+	*sqlcdb.Queries
 }
 
-func NewUserService(q *repo.Queries) *UserService {
+func NewUserService(q *sqlcdb.Queries) *UserService {
 	return &UserService{q}
 }
 
-func (u *UserService) GetAllUsers(ctx context.Context) ([]repo.User, error) {
+func (u *UserService) GetAllUsers(ctx context.Context) ([]sqlcdb.User, error) {
 	return u.ListUsers(ctx)
+}
+
+func (u *UserService) CreateUser(ctx context.Context, user sqlcdb.User) (sqlcdb.User, error) {
+	return u.CreateUser(ctx, user)
 }

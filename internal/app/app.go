@@ -7,7 +7,7 @@ import (
 )
 
 type App struct {
-	router  router.MyRouter
-	handler handlers.UserHandler
-	service service.UserService
+	router  *router.MyRouter
+	handler *handlers.UserHandler
+	service *service.UserService
 }

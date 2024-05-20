@@ -14,9 +14,6 @@ type UserHandler struct {
 func NewUserHandler(userService *service.UserService) *UserHandler {
 	return &UserHandler{userService}
 }
-func (handler *UserHandler) HelloHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello World"))
-}
 
 func (handler *UserHandler) GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)

@@ -16,7 +16,6 @@ func NewRouter(handler *handlers.UserHandler) *MyRouter {
 }
 
 func (r *MyRouter) HandleRequests() {
-	r.HandleFunc("/hello", r.HelloHandler).Methods("GET")
 	r.HandleFunc("/users/{id}", r.GetUserHandler).Methods("GET")
 	r.HandleFunc("/users", r.GetUsersHandler).Methods("GET")
 	r.HandleFunc("/users", r.CreateUserHandler).Methods("POST")

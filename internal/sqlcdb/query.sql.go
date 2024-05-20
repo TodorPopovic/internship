@@ -3,7 +3,7 @@
 //   sqlc v1.26.0
 // source: query.sql
 
-package repo
+package sqlcdb
 
 import (
 	"context"
@@ -36,7 +36,7 @@ DELETE FROM users
 WHERE id = $1
 `
 
-func (q *Queries) DeleteUser(ctx context.Context, id int32) error {
+func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
 	_, err := q.db.Exec(ctx, deleteUser, id)
 	return err
 }
@@ -46,7 +46,7 @@ SELECT id, name, surname, email, password FROM users
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
+func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 	row := q.db.QueryRow(ctx, getUser, id)
 	var i User
 	err := row.Scan(
@@ -100,7 +100,7 @@ WHERE id = $1
 `
 
 type UpdateUserParams struct {
-	ID       int32
+	ID       int64
 	Name     string
 	Surname  string
 	Email    string

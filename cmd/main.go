@@ -7,7 +7,7 @@ import (
 	"intership/internal/handlers"
 	"intership/internal/router"
 	"intership/internal/service"
-	"intership/internal/sqlc/repo"
+	"intership/internal/sqlcdb"
 	"net/http"
 	"os"
 	"os/signal"
@@ -23,7 +23,14 @@ func main() {
 	}
 	defer conn.Close(ctx)
 
-	db := repo.New(conn)
+	db := sqlcdb.New(conn)
+
+	//err = db.CreateUser(ctx, sqlcdb.CreateUserParams{
+	//	Name:     "Todor",
+	//	Surname:  "Popovic",
+	//	Email:    "todor.popovic@nimbus-tech.io",
+	//	Password: "password",
+	//})
 
 	service1 := service.NewUserService(db)
 	handler := handlers.NewUserHandler(service1)
@@ -42,11 +49,5 @@ func main() {
 
 	sig := <-sigChan
 	fmt.Println("Graceful shutdown", sig)
-	//err = queries.CreateUser(ctx, repo.CreateUserParams{
-	//	Name:     "Nesto",
-	//	Surname:  "nesto",
-	//	Email:    "nesro",
-	//	Password: "nesto",
-	//})
 
 }

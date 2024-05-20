@@ -1,12 +1,12 @@
 version: "2"
 sql:
   - engine: "postgresql"
-    queries: "query.sql"
-    schema: "schema.sql"
+    queries: "sqlc/query.sql"
+    schema: "sqlc/migrations"
     database:
       uri: postgresql://postgres:password@localhost:5432/internship
     gen:
       go:
-        package: "repo"
-        out: "repo"
+        package: "sqlcdb"
+        out: "internal/sqlcdb"
         sql_package: "pgx/v5"
