@@ -1,0 +1,12 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "query.sql"
+    schema: "schema.sql"
+    database:
+      uri: postgresql://postgres:password@localhost:5432/internship
+    gen:
+      go:
+        package: "repo"
+        out: "repo"
+        sql_package: "pgx/v5"
