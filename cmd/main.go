@@ -32,8 +32,8 @@ func main() {
 	//	Password: "password",
 	//})
 
-	service1 := service.NewUserService(db)
-	handler := handlers.NewUserHandler(service1)
+	iservice := service.NewUserService(db)
+	handler := handlers.NewUserHandler(iservice)
 	r := router.NewRouter(handler)
 	r.HandleRequests()
 	go func() {
