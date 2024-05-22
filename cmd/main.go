@@ -6,5 +6,5 @@ package main
 // @host localhost:8080
 // @BasePath /
 func main() {
-
+	initApp()
 }

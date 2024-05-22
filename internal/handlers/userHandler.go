@@ -23,7 +23,7 @@ type UserHandler struct {
 }
 
 func NewUserHandler(userService service.IUserService) *UserHandler {
-	return &UserHandler{userService}
+	return &UserHandler{service: userService}
 }
 
 func (handler *UserHandler) GetUserHandler(w http.ResponseWriter, r *http.Request) {
