@@ -1,3 +1,6 @@
+//go:build wireinject
+// +build wireinject
+
 package main
 
 import (
@@ -5,6 +8,6 @@ import (
 	"intership/internal/app"
 )
 
-func initApp() *app.App {
+func InitApp() (*app.App, error) {
 	panic(wire.Build(app.Providers))
 }

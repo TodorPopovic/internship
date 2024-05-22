@@ -13,7 +13,7 @@ import (
 type App struct {
 	context.Context
 	*pgxpool.Pool
-	router *router.MyRouter
+	Router *router.MyRouter
 }
 
 var Providers = wire.NewSet(
