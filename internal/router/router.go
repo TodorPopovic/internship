@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"intership/internal/handlers"
 )
 
@@ -16,6 +17,7 @@ func NewRouter(handler *handlers.UserHandler) *MyRouter {
 }
 
 func (r *MyRouter) HandleRequests() {
+	r.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 	r.HandleFunc("/users/{id}", r.GetUserHandler).Methods("GET")
 	r.HandleFunc("/users", r.GetUsersHandler).Methods("GET")
 	r.HandleFunc("/users", r.CreateUserHandler).Methods("POST")

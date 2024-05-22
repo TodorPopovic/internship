@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"intership/internal/sqlcdb"
 )
 
@@ -14,27 +15,31 @@ type IUserService interface {
 }
 
 type UserService struct {
-	q *sqlcdb.Queries
+	*pgxpool.Pool
 }
 
-func NewUserService(q *sqlcdb.Queries) *UserService {
-	return &UserService{q}
+func NewUserService(p *pgxpool.Pool) *UserService {
+	return &UserService{p}
 }
 
 func (u *UserService) GetUser(ctx context.Context, id int64) (sqlcdb.User, error) {
-	return u.q.GetUser(ctx, id)
+	q := sqlcdb.New(u)
+	return q.GetUser(ctx, id)
 }
 
 func (u *UserService) GetAllUsers(ctx context.Context) ([]sqlcdb.User, error) {
-	return u.q.ListUsers(ctx)
+	q := sqlcdb.New(u)
+	return q.ListUsers(ctx)
 }
 
 func (u *UserService) CreateUser(ctx context.Context, user sqlcdb.CreateUserParams) error {
-	return u.q.CreateUser(ctx, user)
+	q := sqlcdb.New(u)
+	return q.CreateUser(ctx, user)
 }
 
 func (u *UserService) UpdateUser(ctx context.Context, user sqlcdb.UpdateUserParams) error {
-	userToUpdate, _ := u.q.GetUser(ctx, user.ID)
+	q := sqlcdb.New(u)
+	userToUpdate, _ := q.GetUser(ctx, user.ID)
 	if user.Name != "" {
 		userToUpdate.Name = user.Name
 	}
@@ -47,9 +52,10 @@ func (u *UserService) UpdateUser(ctx context.Context, user sqlcdb.UpdateUserPara
 	if user.Password != "" {
 		userToUpdate.Password = user.Password
 	}
-	return u.q.UpdateUser(ctx, sqlcdb.UpdateUserParams(userToUpdate))
+	return q.UpdateUser(ctx, sqlcdb.UpdateUserParams(userToUpdate))
 }
 
 func (u *UserService) DeleteUser(ctx context.Context, id int64) error {
-	return u.q.DeleteUser(ctx, id)
+	q := sqlcdb.New(u)
+	return q.DeleteUser(ctx, id)
 }
