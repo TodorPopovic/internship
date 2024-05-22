@@ -19,6 +19,7 @@ type App struct {
 var Providers = wire.NewSet(
 	context.Background,
 	db.NewPostgres,
+	db.Providers,
 	service.Providers,
 	handlers.NewUserHandler,
 	router.NewRouter,

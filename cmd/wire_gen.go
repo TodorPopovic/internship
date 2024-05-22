@@ -23,7 +23,8 @@ func InitApp() (*app.App, error) {
 	if err != nil {
 		return nil, err
 	}
-	userService := service.NewUserService(pool)
+	myRepo := db.NewMyRepo(pool)
+	userService := service.NewUserService(myRepo)
 	userHandler := handlers.NewUserHandler(userService)
 	myRouter := router.NewRouter(userHandler)
 	appApp := &app.App{

@@ -5,5 +5,6 @@ import (
 )
 
 var Providers = wire.NewSet(
-	NewUserService, wire.Bind(new(IUserService), new(*UserService)),
+	NewUserService,
+	wire.Bind(new(IUserService), new(*UserService)),
 )
