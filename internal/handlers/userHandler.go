@@ -15,19 +15,20 @@ import (
 func init() {
 	logrus.SetFormatter(&logrus.JSONFormatter{})
 	logrus.SetOutput(os.Stdout)
-	logrus.SetLevel(logrus.WarnLevel)
+	logrus.SetLevel(logrus.InfoLevel)
 }
 
 type UserHandler struct {
-	service service.IUserService
+	Service service.IUserService
 }
 
 func NewUserHandler(userService service.IUserService) *UserHandler {
-	return &UserHandler{service: userService}
+	return &UserHandler{Service: userService}
 }
 
 func (handler *UserHandler) GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	logrus.Info("Getting user")
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
@@ -35,7 +36,7 @@ func (handler *UserHandler) GetUserHandler(w http.ResponseWriter, r *http.Reques
 		logrus.Error("Unable to parse id")
 		json.NewEncoder(w).Encode("Unable to parse id")
 	}
-	user, err2 := handler.service.GetUser(r.Context(), int64(id))
+	user, err2 := handler.Service.GetUser(r.Context(), int64(id))
 	if err2 != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		logrus.Error("Unable to retrieve user")
@@ -47,7 +48,8 @@ func (handler *UserHandler) GetUserHandler(w http.ResponseWriter, r *http.Reques
 
 func (handler *UserHandler) GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	users, err := handler.service.GetAllUsers(r.Context())
+	logrus.Info("Getting users")
+	users, err := handler.Service.GetAllUsers(r.Context())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		logrus.Error("Unable to retrieve users")
@@ -66,6 +68,7 @@ func (handler *UserHandler) GetUsersHandler(w http.ResponseWriter, r *http.Reque
 // @Router /users [post]
 func (handler *UserHandler) CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	logrus.Info("Creating new user")
 	decoder := json.NewDecoder(r.Body)
 	var createUser sqlcdb.CreateUserParams
 	err := decoder.Decode(&createUser)
@@ -74,7 +77,7 @@ func (handler *UserHandler) CreateUserHandler(w http.ResponseWriter, r *http.Req
 		logrus.Error("Invalid json")
 		json.NewEncoder(w).Encode("Invalid json")
 	}
-	err2 := handler.service.CreateUser(r.Context(), createUser)
+	err2 := handler.Service.CreateUser(r.Context(), createUser)
 	if err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		logrus.Error("Unable to create user")
@@ -86,6 +89,7 @@ func (handler *UserHandler) CreateUserHandler(w http.ResponseWriter, r *http.Req
 
 func (handler *UserHandler) UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	logrus.Info("Updating user")
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
@@ -102,7 +106,7 @@ func (handler *UserHandler) UpdateUserHandler(w http.ResponseWriter, r *http.Req
 		json.NewEncoder(w).Encode("Invalid json")
 	}
 	updateUser.ID = int64(id)
-	err3 := handler.service.UpdateUser(r.Context(), updateUser)
+	err3 := handler.Service.UpdateUser(r.Context(), updateUser)
 	if err3 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		logrus.Error("Unable to update user")
@@ -114,6 +118,7 @@ func (handler *UserHandler) UpdateUserHandler(w http.ResponseWriter, r *http.Req
 
 func (handler *UserHandler) DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	logrus.Info("Deleting user")
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
@@ -121,7 +126,7 @@ func (handler *UserHandler) DeleteUserHandler(w http.ResponseWriter, r *http.Req
 		logrus.Error("Unable to parse id")
 		json.NewEncoder(w).Encode("Unable to parse id")
 	}
-	err1 := handler.service.DeleteUser(r.Context(), int64(id))
+	err1 := handler.Service.DeleteUser(r.Context(), int64(id))
 	if err1 != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		logrus.Error("Unable to delete user")

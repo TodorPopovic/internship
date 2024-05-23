@@ -23,14 +23,16 @@ func InitApp() (*app.App, error) {
 	if err != nil {
 		return nil, err
 	}
+	scheduler := service.NewScheduler()
 	myRepo := db.NewMyRepo(pool)
 	userService := service.NewUserService(myRepo)
 	userHandler := handlers.NewUserHandler(userService)
 	myRouter := router.NewRouter(userHandler)
 	appApp := &app.App{
-		Context: contextContext,
-		Pool:    pool,
-		Router:  myRouter,
+		Context:   contextContext,
+		Pool:      pool,
+		Scheduler: scheduler,
+		Router:    myRouter,
 	}
 	return appApp, nil
 }

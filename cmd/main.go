@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -13,9 +13,13 @@ import (
 func main() {
 	if app, err := InitApp(); err == nil {
 		app.Router.HandleRequests()
+		//scheduler := app.Scheduler.Start()
+		//<-scheduler
+
 		err = http.ListenAndServe(":8080", app.Router)
 		if err != nil {
-			fmt.Println(err)
+			logrus.Fatal(err)
 		}
+
 	}
 }

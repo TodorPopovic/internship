@@ -13,11 +13,13 @@ import (
 type App struct {
 	context.Context
 	*pgxpool.Pool
+	*service.Scheduler
 	Router *router.MyRouter
 }
 
 var Providers = wire.NewSet(
 	context.Background,
+	service.NewScheduler,
 	db.NewPostgres,
 	db.Providers,
 	service.Providers,
